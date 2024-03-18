@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Filter List</title>
+</head>
+
+<body>
+    <h2>Enter a comma-separated list of letters:</h2>
+    <form action="/filter_list" method="post">
+        <input type="text" name="letters">
+        <input type="submit" value="Filter">
+    </form>
+    <h2>Filtered List:</h2>
+    <ul>
+        {% for value in filtered_values %}
+        <li>{{ value }}</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
