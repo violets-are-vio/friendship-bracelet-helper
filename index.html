@@ -1,23 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Filter List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Song Titles</title>
 </head>
-
 <body>
-    <h2>Enter a comma-separated list of letters:</h2>
-    <form action="/filter_list" method="post">
-        <input type="text" name="letters">
+    <h1>Filter Taylor Swift Song Titles</h1>
+    <form id="inputForm">
+        <label for="letters">Enter a comma-separated list of letters:</label><br>
+        <input type="text" id="letters" name="letters"><br><br>
         <input type="submit" value="Filter">
     </form>
-    <h2>Filtered List:</h2>
-    <ul>
-        {% for value in filtered_values %}
-        <li>{{ value }}</li>
-        {% endfor %}
-    </ul>
-</body>
+    <div id="result"></div>
 
+    <script>
+        document.getElementById("inputForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            var letters = document.getElementById("letters").value;
+
+            // Send the input to the backend Python script
+            fetch('/filter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ letters: letters })
+            })
+            .then(response => response.json())
+            .then(data => {
+                var resultDiv = document.getElementById("result");
+                resultDiv.innerHTML = "<h2>Filtered Song Titles:</h2><ul>";
+                data.forEach(title => {
+                    resultDiv.innerHTML += "<li>" + title + "</li>";
+                });
+                resultDiv.innerHTML += "</ul>";
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
 </html>
